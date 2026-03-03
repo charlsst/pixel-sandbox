@@ -5,12 +5,18 @@ from grid import Grid
 def main() :
     settings = Settings()
 
-    screen = pygame.display.set_mode(settings.SCREEN_SIZE)
+    screen = pygame.display.set_mode(((settings.GRID_SIZE[0] * (settings.CELL_SIZE + settings.CELL_PADDING)) + settings.SCREEN_BORDER[3] + settings.SCREEN_BORDER[1],
+                                      (settings.GRID_SIZE[1] * (settings.CELL_SIZE + settings.CELL_PADDING)) + settings.SCREEN_BORDER[0] + settings.SCREEN_BORDER[2]))
     pygame.display.set_caption(settings.SCREEN_TITLE)
 
     clock = pygame.time.Clock()
 
-    grid = Grid(settings.SCREEN_SIZE, settings.CELL_SIZE, settings.CELL_PADDING, settings.EMPTY_COLOUR)
+    grid = Grid(settings.GRID_SIZE,
+                settings.CELL_SIZE,
+                settings.CELL_PADDING,
+                settings.SCREEN_BORDER[0],
+                settings.SCREEN_BORDER[3],
+                settings.EMPTY_COLOUR)
 
     running = True
 
