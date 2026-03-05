@@ -1,5 +1,5 @@
 import pygame
-from custom_types import Display, Position, Colour
+from custom_types import Display, Position, Colour, Grid_Size
 from particle import Particle
 
 class Grid :
@@ -29,12 +29,22 @@ class Grid :
                     colour = particle.get_colour()
                 
                 pygame.draw.rect(screen, colour, (column * (self.cell_size+self.cell_padding) + self.top_padding,
-                                                         row * (self.cell_size+self.cell_padding) + self.left_padding,
-                                                         self.cell_size,
-                                                         self.cell_size))
+                                                  row * (self.cell_size+self.cell_padding) + self.left_padding,
+                                                  self.cell_size,
+                                                  self.cell_size))
                 
+    def get_size(self) -> Grid_Size :
+        return (self.rows, self.columns)
+
     def get_cell(self, position : Position) -> Particle :
-        return self.cells[position[1]][position[0]]
+        if 0 <= position[0] < self.columns and 0 <= position[1] < self.rows :
+            return self.cells[position[1]][position[0]]
+        return None
     
     def set_cell(self, position : Position, particle : Particle) :
+        if not(0 <= position[0] < self.columns and 0 <= position[1] < self.rows) :
+            return
         self.cells[position[1]][position[0]] = particle
+
+    def is_cell_empty(self, position : Position) -> bool :
+        return self.cells[position[1]][position[0]] is None

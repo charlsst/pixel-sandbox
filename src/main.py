@@ -24,11 +24,12 @@ def main() :
         buttons = pygame.mouse.get_pressed()
         if buttons[0] :
             mouse_position = pygame.mouse.get_pos()
-            mouse_row = mouse_position[0] // (settings.CELL_SIZE + settings.CELL_PADDING)
-            mouse_column = mouse_position[1] // (settings.CELL_SIZE + settings.CELL_PADDING)
-
-            if simulation.get_grid_cell((mouse_row, mouse_column)) is None :
-                simulation.add_particle((mouse_row, mouse_column), Sand())
+            mouse_x = mouse_position[0] // (settings.CELL_SIZE + settings.CELL_PADDING)
+            mouse_y = mouse_position[1] // (settings.CELL_SIZE + settings.CELL_PADDING)
+            print(mouse_x, mouse_y)
+            simulation.add_particle((mouse_x, mouse_y), Sand())
+        
+        simulation.update()
 
         # Draw Graphics #
         screen.fill(settings.BACKGROUND_COLOUR)
@@ -36,7 +37,7 @@ def main() :
 
         # Final Changes #
         pygame.display.flip()
-        clock.tick()
+        clock.tick(60)
     
 if __name__ == "__main__" :
     main()

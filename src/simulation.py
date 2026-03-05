@@ -13,9 +13,21 @@ class Simulation :
                          self.settings.SCREEN_BORDER[1],
                          self.settings.EMPTY_COLOUR,
                          self.settings.SAND_COLOUR)
+        self.grid_size = self.grid.get_size()
     
     def draw(self, screen : Display) :
         self.grid.draw(screen)
+
+    def update(self) :
+        for y in range(self.grid_size[0] -2, -1, -1) :
+            for x in range(self.grid_size[1]) :
+                particle = self.grid.get_cell((x, y))
+                if particle is not None :
+                    new_position = particle.update((x, y))
+                    
+                    if new_position != (x, y) :
+                        self.grid.set_cell(new_position, particle)
+                        self.grid.set_cell((x, y), None)
 
     def get_grid_cell(self, position : Position) :
         return self.grid.get_cell(position)

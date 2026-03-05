@@ -29,7 +29,11 @@ class Particle :
         print("Normal")
         return particle_position
 
-class Sand(Particle) :
+class Sand(Particle):
     colour = settings.SAND_COLOUR
 
-    def update(self, particle_position) : print("Sand")
+    def update(self, particle_position):
+        x, y = particle_position
+        if particle_position[1] < settings.GRID_SIZE[1] - 1:
+            return (particle_position[0], particle_position[1] + 1)
+        return particle_position
