@@ -2,7 +2,7 @@ import pygame
 import sys
 from settings import Settings
 from simulation import Simulation
-from particle import Sand
+from particle import SAND
 
 def main() :
     settings = Settings()
@@ -15,27 +15,29 @@ def main() :
     simulation = Simulation(settings)
 
     while True: 
-        # Read Events #
+        # Read Events 
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+        # Update Simulation
+        simulation.update()
         
+        # Check for Inputs
         buttons = pygame.mouse.get_pressed()
         if buttons[0] :
             mouse_position = pygame.mouse.get_pos()
-            mouse_x = mouse_position[0] // (settings.CELL_SIZE + settings.CELL_PADDING)
-            mouse_y = mouse_position[1] // (settings.CELL_SIZE + settings.CELL_PADDING)
-            print(mouse_x, mouse_y)
-            simulation.add_particle((mouse_x, mouse_y), Sand())
+            mouse_x = (mouse_position[0] - settings.SCREEN_BORDER[1]) // (settings.CELL_SIZE + settings.CELL_PADDING)
+            mouse_y = (mouse_position[1] - settings.SCREEN_BORDER[0]) // (settings.CELL_SIZE + settings.CELL_PADDING)
+            simulation.add_particle((mouse_x, mouse_y), SAND)
         
-        simulation.update()
 
-        # Draw Graphics #
+        # Draw Graphics
         screen.fill(settings.BACKGROUND_COLOUR)
         simulation.draw(screen)
 
-        # Final Changes #
+        # Final Changes
         pygame.display.flip()
         clock.tick(60)
     

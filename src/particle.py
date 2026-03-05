@@ -1,39 +1,54 @@
 import random
-import colorsys
 from custom_types import Position, Colour
 from settings import Settings
 
 settings = Settings()
 
-class Particle :
-    colour = (255, 255, 255)
+EMPTY = 0
+SAND = 1
 
-    def __init__(self, do_randomise_colour=True) :
-        self.colour = self.randomise_colour(self.colour)
+def get_particle_colour(particle_id : int, position : Position) -> Colour :
+    if particle_id == 0 :
+        return settings.EMPTY_COLOUR
+    if particle_id == 1 :
+        return randomise_colour(settings.SAND_COLOUR, position)
 
-    def get_colour(self) -> Colour :
-        return self.colour
+def randomise_colour(base_colour_rgb : Colour, position : Position) -> Colour :
+        rng = random.Random(position[0] * 73856093 ^ position[1] * 19349663)
 
-    def randomise_colour(self, base_colour_rgb : Colour) -> Colour :
-        base_colour_hsv = colorsys.rgb_to_hsv(base_colour_rgb[0]/255, base_colour_rgb[1]/255, base_colour_rgb[2]/255)
-        base_colour_hsv = (base_colour_hsv[0] + random.uniform(-0.01, 0.01),
-                           base_colour_hsv[1] + random.uniform(-0.05, 0.05),
-                           base_colour_hsv[2] + random.uniform(-0.05, 0.05))
-        red, green, blue = colorsys.hsv_to_rgb(max(0, min(1, base_colour_hsv[0])),
-                                               max(0, min(1, base_colour_hsv[1])),
-                                               max(0, min(1, base_colour_hsv[2])))
+        v = rng.randint(-10, 10)
+        r = max(0, min(255, base_colour_rgb[0] + v))
+        g = max(0, min(255, base_colour_rgb[1] + v))
+        b = max(0, min(255, base_colour_rgb[2] + v))
+        return r, g, b
 
-        return int(red * 255), int(green * 255), int(blue * 255)
+def update_1(particle_position: Position, grid: list[int]) -> Position:
+    x, y = particle_position
+    width = settings.GRID_SIZE[0]
+    height = settings.GRID_SIZE[1]
+
+    new_y = y + 1
+
+    if new_y >= height:
+        return (x, y)
+
+    below = x + new_y * width
+
+    if grid[below] == 0:
+        return (x, new_y)
     
-    def update(self, particle_position : Position) -> Position :
-        print("Normal")
-        return particle_position
+    if random.random() < 0.5:
+        offsets = (-1, 1)
+    else:
+        offsets = (1, -1)
 
-class Sand(Particle):
-    colour = settings.SAND_COLOUR
+    for dx in offsets:
+        nx = x + dx
 
-    def update(self, particle_position):
-        x, y = particle_position
-        if particle_position[1] < settings.GRID_SIZE[1] - 1:
-            return (particle_position[0], particle_position[1] + 1)
-        return particle_position
+        if 0 <= nx < width:
+            idx = nx + new_y * width
+
+            if grid[idx] == 0:
+                return (nx, new_y)
+
+    return (x, y)
