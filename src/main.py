@@ -1,4 +1,5 @@
 import pygame
+from particle import Particle
 from settings import Settings
 from grid import Grid
 
@@ -16,7 +17,12 @@ def main() :
                 settings.CELL_PADDING,
                 settings.SCREEN_BORDER[0],
                 settings.SCREEN_BORDER[1],
-                settings.EMPTY_COLOUR)
+                settings.EMPTY_COLOUR,
+                settings.SAND_COLOUR)
+    
+    for i in range(20) :
+        for j in range (15) :
+            grid.setCell((i,j), Particle())
 
     running = True
 

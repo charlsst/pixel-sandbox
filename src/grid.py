@@ -1,7 +1,12 @@
 import pygame
 
+from particle import Particle
+
 class Grid :
-    def __init__(self, grid_size, cell_size, cell_padding, top_padding, left_padding, empty_colour) :
+    def __init__(self, grid_size : int,
+                 cell_size : int, cell_padding : int,
+                 top_padding : int, left_padding : int,
+                 empty_colour : tuple[int,int,int], sand_colour : tuple[int,int,int]) :
         self.rows = grid_size[1]
         self.columns = grid_size[0]
         self.cell_size = cell_size
@@ -13,12 +18,21 @@ class Grid :
         self.cells = [[None for _ in range(self.columns)] for _ in range(self.rows)]
 
         self.empty_colour = empty_colour
+        self.sand_colour = sand_colour
 
-    def draw(self, screen) :
+    def draw(self, screen : pygame.display) :
         for row in range(self.rows) :
             for column in range(self.columns) :
-                pygame.draw.rect(screen, self.empty_colour, (column * (self.cell_size+self.cell_padding) + self.top_padding,
+                colour = self.empty_colour
+                particle = self.cells[row][column]
+                if particle is not None :
+                    colour = particle.getColour()
+                    print(colour)
+                
+                pygame.draw.rect(screen, colour, (column * (self.cell_size+self.cell_padding) + self.top_padding,
                                                          row * (self.cell_size+self.cell_padding) + self.left_padding,
                                                          self.cell_size,
                                                          self.cell_size))
-                
+    
+    def setCell(self, position : tuple[int,int], particle : Particle) :
+        self.cells[position[1]][position[0]] = particle
