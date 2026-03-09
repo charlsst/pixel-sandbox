@@ -1,7 +1,7 @@
 import pygame
 from custom_types import Display, Position
 from settings import Settings
-from particle import SAND, COLOURS_MAP, UPDATES, set_colour
+from particle import COLOURS_MAP, UPDATES, set_colour
 
 class Grid :
     def __init__(self, settings : Settings) :
@@ -24,12 +24,11 @@ class Grid :
         for y in range(grid_height -2, -1, -1) :
             for x in range(grid_width) :
                 particle = grid[x + (y * grid_width)]
-                if particle != 0 :
-                    new_position = UPDATES[SAND]((x, y), grid)
-                    
-                    if new_position != (x, y) :
-                        self.set_cell(new_position, SAND)
-                        self.set_cell((x, y), 0)
+                if UPDATES[particle] is not None :
+                    new_positions = UPDATES[particle]((x, y), grid)
+
+                    for new_position in new_positions :
+                        self.set_cell(new_position[0], new_position[1])
 
     def get_cell(self, position : Position) :
         return self.grid[position[0] + (position[1] * self.grid_width)]
