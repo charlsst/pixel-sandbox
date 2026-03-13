@@ -7,12 +7,13 @@ A highly-customisable pixel sandbox simulator using PyGame.
 ## How to Use
 
 You can run `main.py` which will open a PyGame window. You can draw particles onto this screen and they will automatically update and start moving.
+Press `SPACE` to pause/unpause.
 
 You can select particles by clicking numbered keys:
-* 0 = Empty
-* 1 = Sand
-* 2 = Rock
-* 3 = Water
+* `0` = Empty
+* `1` = Sand
+* `2` = Rock
+* `3` = Water
 
 ## Current Particles
 

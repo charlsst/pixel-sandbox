@@ -15,6 +15,7 @@ def main() :
     grid = Grid(settings)
 
     particleToDraw = EMPTY
+    paused = False
 
     while True: 
         # Read Events 
@@ -23,6 +24,8 @@ def main() :
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN :
+                if event.key == pygame.K_SPACE :
+                    paused = not paused
                 if event.key == pygame.K_0 :
                     particleToDraw = EMPTY
                 if event.key == pygame.K_1 :
@@ -33,7 +36,8 @@ def main() :
                     particleToDraw = WATER
 
         # Update Simulation
-        grid.update()
+        if not paused :
+            grid.update()
         
         # Check for Inputs
         buttons = pygame.mouse.get_pressed()
